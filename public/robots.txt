@@ -1,0 +1,19 @@
+User-agent: *
+
+Disallow: /login
+Disallow: /reset-password/
+
+Disallow: /adminhome
+Disallow: /admin/
+
+Disallow: /settings
+Disallow: /project
+Disallow: /service
+
+Disallow: /adminviewproject
+Disallow: /adminviewservice
+
+Disallow: /admineditproject/
+Disallow: /admineditservice/
+
+Sitemap: https://studibits.com/sitemap.xml
