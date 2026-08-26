@@ -1,6 +1,7 @@
 const express=require('express')
 const app=express()
 const cors=require('cors')
+const path = require("path");
 require('dotenv').config()
 console.log("JWT_SECRET loaded:", !!process.env.JWT_SECRET);
 // console.log("GOOGLE_CLIENT_ID:", process.env.GOOGLE_CLIENT_ID);
