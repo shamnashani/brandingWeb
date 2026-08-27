@@ -22,24 +22,6 @@ const Film = () => {
   const [projects, setProjects] = useState([]);
   const [services, setServices] = useState([]);
 
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    message: "",
-  });
-
-  const [submitted, setSubmitted] = useState(false);
-
-  const [reviewData, setreviewData] = useState({
-    name: "",
-    email: "",
-    rating: 5,
-    message: "",
-  });
-
-  const [reviewSubmit, setreviewSubmit] = useState(false);
-
   useEffect(() => {
     AOS.init({
       duration: 1000,
@@ -47,7 +29,7 @@ const Film = () => {
     });
 
     fetchProjects();
-   fetchServices();
+    fetchServices();
 
   }, []);
 
@@ -91,92 +73,32 @@ const Film = () => {
     },
   ];
 
-  // =====================================================
-  // WHATSAPP
-  // =====================================================
+  //========== fetch data =============
 
-  const whatsappMessage = encodeURIComponent(
-    "Hello S1 Creations, I came across your website and would like to know more about your film production services. Please share the details."
-  );
-
-  // =====================================================
-  // ENQUIRY
-  // =====================================================
-
-  const handleEnquiry = async (e) => {
-    e.preventDefault();
-
+  const fetchServices = async () => {
     try {
-      await api.post("/enquiry/submit", {
-        ...formData,
-        service: "Film",
-      });
+      const res = await api.get("/service/viewservices?page=film");
 
-      setSubmitted(true);
-
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        message: "",
-      });
+      if (res.data.status === "ok") {
+        setServices(res.data.data);
+      }
     } catch (err) {
-      alert("Failed to send enquiry");
+      console.error("Error fetching services:", err);
     }
   };
-
-  // =====================================================
-  // REVIEW
-  // =====================================================
-
-  const ReviewSub = async (e) => {
-    e.preventDefault();
-
-    try {
-      await api.post("/rev/add-review", {
-        ...reviewData,
-        service: true,
-      });
-
-      setreviewSubmit(true);
-
-      setreviewData({
-        name: "",
-        email: "",
-        rating: 5,
-        message: "",
-      });
-    } catch (err) {
-      alert("Failed to submit review");
-    }
-  };
-  //========== project =============
-
-
- const fetchServices = async () => {
-  try {
-    const res = await api.get("/service/viewservices?page=film");
-
-    if (res.data.status === "ok") {
-      setServices(res.data.data);
-    }
-  } catch (err) {
-    console.error("Error fetching services:", err);
-  }
-};
 
 
   const fetchProjects = async () => {
-  try {
-    const res = await api.get("/project/viewprojects?page=film");
+    try {
+      const res = await api.get("/project/viewprojects?page=film");
 
-    if (res.data.status === "ok") {
-      setProjects(res.data.data);
+      if (res.data.status === "ok") {
+        setProjects(res.data.data);
+      }
+    } catch (err) {
+      console.error("Error fetching projects:", err);
     }
-  } catch (err) {
-    console.error("Error fetching projects:", err);
-  }
-};
+  };
 
   return (
     <div className="min-h-screen scroll-smooth bg-[#0b0b0b] text-white">
@@ -400,7 +322,7 @@ const Film = () => {
                     {/* Image */}
                     <div className="overflow-hidden md:col-span-4">
                       <img
-                        src={`http://localhost:4000/media/${service.photo}`}
+                        src={`${api.defaults.baseURL}/media/${service.photo}`}
                         alt={service.title}
                         className="h-[190px] w-full object-cover transition duration-700 group-hover:scale-105 md:h-[210px]"
                         onError={(e) => {

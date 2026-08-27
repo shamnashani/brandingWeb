@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import api from "./Api";
 import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 
 const AdminEditservice = () => {
-const { id } = useParams();
+  const { id } = useParams();
   const navigate = useNavigate();
 
   const [title, setTitle] = useState("");
@@ -12,34 +12,33 @@ const { id } = useParams();
   const [page, setPage] = useState("");
   const [photo, setPhoto] = useState(null);
   const [currentPhoto, setCurrentPhoto] = useState("");
-
   const [loading, setLoading] = useState(true);
 
-  // ================= Fetch Project =================
+  // ================= Fetch Service =================
+
+  const fetchServices = useCallback(async () => {
+    try {
+      const res = await api.get(`/service/service/${id}`);
+
+      if (res.data.status === "ok") {
+        const service = res.data.data;
+
+        setTitle(service.title || "");
+        setDescription(service.description || "");
+        setPage(service.page || "");
+        setCurrentPhoto(service.photo || "");
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  }, [id]);
 
   useEffect(() => {
-  
-  fetchServices();
-}, [id]);
+    fetchServices();
+  }, [fetchServices]);
 
-  const fetchServices = async () => {
-  try {
-    const res = await api.get(`/service/service/${id}`);
-
-    if (res.data.status === "ok") {
-      const service = res.data.data;
-
-      setTitle(service.title || "");
-      setDescription(service.description || "");
-      setPage(service.page || "");
-      setCurrentPhoto(service.photo || "");
-    }
-  } catch (err) {
-    console.error(err);
-  } finally {
-    setLoading(false);
-  }
-};
 
   // ================= Update Project =================
 

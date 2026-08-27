@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import api from "./Api";
 import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 
 const AdminEditproject = () => {
-const { id } = useParams();
+  const { id } = useParams();
   const navigate = useNavigate();
 
   const [title, setTitle] = useState("");
@@ -12,33 +12,32 @@ const { id } = useParams();
   const [page, setPage] = useState("");
   const [photo, setPhoto] = useState(null);
   const [currentPhoto, setCurrentPhoto] = useState("");
-
   const [loading, setLoading] = useState(true);
 
   // ================= Fetch Project =================
 
-  useEffect(() => {
-  fetchProject();
-}, [id]);
+  const fetchProject = useCallback(async () => {
+    try {
+      const res = await api.get(`/project/viewproject/${id}`);
 
-  const fetchProject = async () => {
-  try {
-    const res = await api.get(`/project/viewproject/${id}`);
+      if (res.data.status === "ok") {
+        const project = res.data.data;
 
-    if (res.data.status === "ok") {
-      const project = res.data.data;
-
-      setTitle(project.title || "");
-      setCategory(project.category || "");
-      setPage(project.page || "");
-      setCurrentPhoto(project.photo || "");
+        setTitle(project.title || "");
+        setCategory(project.category || "");
+        setPage(project.page || "");
+        setCurrentPhoto(project.photo || "");
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
-  } catch (err) {
-    console.error(err);
-  } finally {
-    setLoading(false);
-  }
-};
+  }, [id]);
+
+  useEffect(() => {
+    fetchProject();
+  }, [fetchProject]);
 
   // ================= Update Project =================
 

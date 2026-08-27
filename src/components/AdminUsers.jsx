@@ -168,24 +168,39 @@ const AdminUsers = () => {
                       </span>
                     </td>
 
-                    {/* Actions */}
-                    <td className="p-4">
-                      <div className="flex gap-2">                  
+{/* Actions */}
+<td className="p-4">
+  <div className="flex gap-2">
 
-                        {/* Delete */}
-                        <button
-                          onClick={() => deleteUser(user._id)}
-                          disabled={user.role === "admin"}
-                          className={`text-[11px] px-3 py-1 rounded transition ${
-                            user.role === "admin"
-                              ? "opacity-30 cursor-not-allowed bg-white/5 text-gray-500"
-                              : "bg-red-500/10 text-red-400 hover:bg-red-500/20"
-                          }`}
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </td>
+    {/* Toggle status */}
+    <button
+      onClick={() => toggleStatus(user._id, user.status)}
+      disabled={user.role === "admin"}
+      className={`text-[11px] px-3 py-1 rounded transition ${
+        user.role === "admin"
+          ? "opacity-30 cursor-not-allowed bg-white/5 text-gray-500"
+          : user.status === "inactive"
+          ? "bg-green-500/10 text-green-400 hover:bg-green-500/20"
+          : "bg-yellow-500/10 text-yellow-400 hover:bg-yellow-500/20"
+      }`}
+    >
+      {user.status === "inactive" ? "Unblock" : "Block"}
+    </button>
+
+    {/* Delete */}
+    <button
+      onClick={() => deleteUser(user._id)}
+      disabled={user.role === "admin"}
+      className={`text-[11px] px-3 py-1 rounded transition ${
+        user.role === "admin"
+          ? "opacity-30 cursor-not-allowed bg-white/5 text-gray-500"
+          : "bg-red-500/10 text-red-400 hover:bg-red-500/20"
+      }`}
+    >
+      Delete
+    </button>
+  </div>
+</td>
 
                   </tr>
                 ))}
