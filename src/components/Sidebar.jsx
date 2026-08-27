@@ -4,8 +4,6 @@ import {
   Star,
   FolderKanban,
   Briefcase,
-  Users,
-  User,
   Settings,
   LogOut,
   ChevronLeft,

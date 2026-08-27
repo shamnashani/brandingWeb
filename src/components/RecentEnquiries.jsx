@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
 import api from "./Api"
 
 function RecentEnquiries() {
   const [enquiries, setEnquiries] = useState([])
   const [loading, setLoading] = useState(true)
-  const nav = useNavigate()
   console.log("Token:", localStorage.getItem("token"));
 
   useEffect(() => {

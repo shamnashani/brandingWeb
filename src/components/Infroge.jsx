@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "./Navbar";
-import { MessageCircle, Phone } from "lucide-react";
 import axios from "axios";
 import ContactCTA from "./ContactCTA";
 import Footer from "./Footer";
@@ -49,13 +48,6 @@ const Infroge = () => {
     }
   };
 
-
-
-
-
-  const whatsappMessage = encodeURIComponent(
-    "Hello INFORGE Technologies, I visited your website and would like to discuss a software project. Please share more details about your services."
-  );
 
   return (
     <div className="min-h-screen scroll-smooth bg-[#0b0b0b] text-white">

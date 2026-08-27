@@ -5,7 +5,6 @@ import StatsCards from "./StatsCards";
 import RecentEnquiries from "./RecentEnquiries";
 import ReviewsApproval from "./ReviewsApproval";
 import ModulesGrid from "./ModulesGrid";
-import Navbar from "./Navbar";
 
 function AdminHome() {
   const [reviewRefresh, setReviewRefresh] = useState(false);

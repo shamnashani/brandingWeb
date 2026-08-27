@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import api from "./Api";
 import Navbar from "./Navbar";
-import { MessageCircle, Phone } from "lucide-react";
 import Footer from "./Footer";
 import ContactCTA from "./ContactCTA";
 import SEO from './SEO'
@@ -62,16 +61,6 @@ const fetchServices = async () => {
     return () => clearInterval(interval);
   }, [whyImages.length]);
 
- 
-  
-
-  
-  
-
-  // ================= WHATSAPP MESSAGE =================
-  const whatsappMessage = encodeURIComponent(
-    "Hello S1 Construction, I am interested in discussing a construction/interior design project. Please share more details about your services."
-  );
 
   return (
     <div className="min-h-screen scroll-smooth bg-[#0b0b0b] text-white">

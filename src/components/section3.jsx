@@ -1,4 +1,3 @@
-import React, { useEffect } from "react";
 import filmImg from "../assets/images/film.jpg";
 import constructionImg from "../assets/images/construction.jpg";
 import techImg from "../assets/images/tech.png";

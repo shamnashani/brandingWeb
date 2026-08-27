@@ -3,10 +3,8 @@ import {
   Star,
   FolderKanban,
   Briefcase,
-  Image,
   Users,
   User,
-  Settings,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
