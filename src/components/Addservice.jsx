@@ -3,11 +3,11 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
-const Add_project = () => {
+const Addservice = () => {
   const nav = useNavigate();
 
   const [title, setTitle] = useState("");
-  const [category, setCategory] = useState("");
+  const [description, setDescription] = useState("");
   const [page, setPage] = useState("");
   const [photo, setPhoto] = useState(null);
 
@@ -17,13 +17,13 @@ const Add_project = () => {
     const formData = new FormData();
 
     formData.append("title", title);
-    formData.append("category", category);
+    formData.append("description", description);
     formData.append("page", page);
     formData.append("photo", photo);
 
     try {
       const res = await axios.post(
-        "http://localhost:4000/project/projects",
+        "http://localhost:4000/service/services",
         formData,
         {
           headers: {
@@ -33,33 +33,33 @@ const Add_project = () => {
       );
 
       if (res.data.status === "ok") {
-        Swal.fire({
-          icon: "success",
-          title: "Project Added",
-          text: "Your project has been added successfully.",
-          background: "#18181b",
-          color: "#fff",
-          confirmButtonColor: "#d4af37",
-          timer: 1800,
-          showConfirmButton: false,
-      
-        });
-         if (page === "construction") {
+  await Swal.fire({
+    icon: "success",
+    title: "Service Added",
+    text: "Your service has been added successfully.",
+    background: "#18181b",
+    color: "#fff",
+    confirmButtonColor: "#d4af37",
+    timer: 1800,
+    showConfirmButton: false,
+  });
+
+  if (page === "construction") {
     nav("/construction");
   } else if (page === "film") {
     nav("/film");
   } else if (page === "infroge") {
     nav("/tech");
-      }
-    } 
-    
-   } catch (err) {
+  }
+}
+
+} catch (err) {
       console.log(err);
 
       Swal.fire({
         icon: "error",
         title: "Oops!",
-        text: "Failed to add project.",
+        text: "Failed to add service.",
         background: "#18181b",
         color: "#fff",
         confirmButtonColor: "#d4af37",
@@ -68,54 +68,38 @@ const Add_project = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center px-4 py-10">
-      <div className="w-full max-w-2xl rounded-2xl border border-yellow-600/30 bg-zinc-900/80 backdrop-blur-lg shadow-2xl p-6">
+    <div className="min-h-screen bg-zinc-900 flex items-center justify-center px-4 py-10">
+      <div className="w-full max-w-2xl rounded-xl border border-zinc-800 bg-zinc-950 p-4 shadow-xl">
 
-        <h2 className="text-2xl font-bold text-center text-yellow-500 mb-6">
-          Add New Project
+        <h2 className="mb-6 text-center text-2xl font-bold text-yellow-500">
+          Add New Service
         </h2>
 
         <form
           onSubmit={btn}
           encType="multipart/form-data"
-          className="grid grid-cols-1 md:grid-cols-2 gap-4"
+          className="grid grid-cols-1 gap-4 md:grid-cols-2"
         >
-          {/* Project Title */}
+          {/* Service Title */}
           <div>
-            <label className="block text-gray-300 mb-2 font-medium">
-              Project Title
+            <label className="mb-2 block font-medium text-gray-300">
+              Service Title
             </label>
 
             <input
               type="text"
               required
               value={title}
-              placeholder="Enter project title"
+              placeholder="Enter service title"
               onChange={(e) => setTitle(e.target.value)}
               className="w-full rounded-lg border border-gray-700 bg-zinc-800 px-4 py-3 text-white placeholder-gray-500 outline-none focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500/40"
             />
           </div>
 
-          {/* Category */}
-          <div>
-            <label className="block text-gray-300 mb-2 font-medium">
-              Category
-            </label>
-
-            <input
-              type="text"
-              required
-              value={category}
-              placeholder="Enter project category"
-              onChange={(e) => setCategory(e.target.value)}
-              className="w-full rounded-lg border border-gray-700 bg-zinc-800 px-4 py-3 text-white placeholder-gray-500 outline-none focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500/40"
-            />
-          </div>
-
           {/* Select Page */}
-          <div className="md:col-span-2">
-            <label className="block text-gray-300 mb-2 font-medium">
-              Project For
+          <div>
+            <label className="mb-2 block font-medium text-gray-300">
+              Service For
             </label>
 
             <select
@@ -127,14 +111,30 @@ const Add_project = () => {
               <option value="">Select division</option>
               <option value="construction">Construction</option>
               <option value="film">Film</option>
-              <option value="infroge">studiobit Technology</option>
+              <option value="infroge">Studiobit Technology</option>
             </select>
           </div>
 
-          {/* Project Image */}
+          {/* Description */}
           <div className="md:col-span-2">
-            <label className="block text-gray-300 mb-2 font-medium">
-              Project Image
+            <label className="mb-2 block font-medium text-gray-300">
+              Service Description
+            </label>
+
+            <textarea
+              required
+              rows={3}
+              value={description}
+              placeholder="Enter service description"
+              onChange={(e) => setDescription(e.target.value)}
+              className="w-full rounded-lg border border-gray-700 bg-zinc-800 px-4 py-2 text-white placeholder-gray-500 outline-none focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500/40 resize-none"
+            />
+          </div>
+
+          {/* Image */}
+          <div className="md:col-span-2">
+            <label className="mb-2 block font-medium text-gray-300">
+              Service Image
             </label>
 
             <input
@@ -142,23 +142,24 @@ const Add_project = () => {
               required
               accept="image/*"
               onChange={(e) => setPhoto(e.target.files[0])}
-              className="w-full rounded-lg border border-dashed border-yellow-600 bg-zinc-800 px-4 py-3 text-gray-300 file:mr-4 file:rounded-md file:border-0 file:bg-yellow-500 file:px-4 file:py-2 file:font-semibold file:text-black hover:file:bg-yellow-400 cursor-pointer"
+              className="w-full cursor-pointer rounded-lg border border-dashed border-yellow-600 bg-zinc-800 px-4 py-3 text-gray-300 file:mr-4 file:rounded-md file:border-0 file:bg-yellow-500 file:px-4 file:py-2 file:font-semibold file:text-black hover:file:bg-yellow-400"
             />
           </div>
 
-          {/* Submit Button */}
+          {/* Submit */}
           <div className="md:col-span-2">
             <button
               type="submit"
               className="w-full rounded-lg bg-yellow-500 py-3 text-lg font-semibold text-black transition hover:bg-yellow-400 hover:shadow-lg hover:shadow-yellow-500/30"
             >
-              Add Project
+              Add Service
             </button>
           </div>
         </form>
+
       </div>
     </div>
   );
 };
 
-export default Add_project;
+export default Addservice;
