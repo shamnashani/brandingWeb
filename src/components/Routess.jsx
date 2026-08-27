@@ -23,8 +23,8 @@ import AdminSettings from './AdminSettings.jsx';
 import AdminPolicies from "./AdminPolicies";
 import EditPolicy from "./EditPolicy";
 import PrivacyPolicy from "./PrivacyPolicy";
-import Add_project from './Add_project.jsx';
-import Add_service from './Add_service.jsx';
+import Addproject from './Addproject.jsx';
+import Addservice from './Addservice.jsx';
 import AdminViewproject from './AdminViewproject.jsx';
 import Adminviewservice from './Adminviewservice.jsx';
 import AdminEditproject from './AdminEditproject.jsx';
@@ -59,8 +59,8 @@ function Routess() {
         <Route path="/admin/policies/new" element={<EditPolicy />}/>
         <Route path="/admin/policies/edit/:id" element={<EditPolicy />}/>
         <Route path="/privacy-policy" element={<PrivacyPolicy />}/>
-        <Route path='/project' element={<Add_project></Add_project>} ></Route>
-        <Route path='/service' element={<Add_service></Add_service>} ></Route>
+        <Route path='/project' element={<Addproject></Addproject>} ></Route>
+        <Route path='/service' element={<Addservice></Addservice>} ></Route>
         <Route path='/adminviewproject' element={<AdminViewproject></AdminViewproject>} ></Route>
         <Route path='/adminviewservice' element={<Adminviewservice></Adminviewservice>} ></Route>
         <Route path='/admineditproject/:id' element={<AdminEditproject></AdminEditproject>} ></Route>
