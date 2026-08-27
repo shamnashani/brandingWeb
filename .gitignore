@@ -52,3 +52,4 @@ Thumbs.db
 # =========================
 uploads/
 server/uploads/
+.vercel

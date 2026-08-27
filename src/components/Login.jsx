@@ -113,24 +113,24 @@ function Login() {
 
           {mode === "login" && (
             <>
-              <div className="flex justify-center [&>div]:w-full mb-5">
-                <GoogleLogin
-                  onSuccess={async (credentialResponse) => {
-                    try {
-                      const res = await api.post("/user/google-login", {
-                        token: credentialResponse.credential,
-                      });
-                      localStorage.setItem("token", res.data.token);
-                      localStorage.setItem("userId", res.data.user.id);
-                      localStorage.setItem("role", res.data.user.role);
-                      nav("/");
-                    } catch (err) {
-                      console.log(err);
-                    }
-                  }}
-                  onError={() => console.log("Google Login Failed")}
-                />
-              </div>
+<div className="[&>div]:!w-full [&_iframe]:!w-full mb-5">
+  <GoogleLogin
+    onSuccess={async (credentialResponse) => {
+      try {
+        const res = await api.post("/user/google-login", {
+          token: credentialResponse.credential,
+        });
+        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("userId", res.data.user.id);
+        localStorage.setItem("role", res.data.user.role);
+        nav("/");
+      } catch (err) {
+        console.log(err);
+      }
+    }}
+    onError={() => console.log("Google Login Failed")}
+  />
+</div>
 
               <div className="flex items-center gap-3 mb-5">
                 <div className="flex-1 h-px bg-white/10" />

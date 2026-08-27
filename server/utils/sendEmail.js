@@ -6,7 +6,7 @@ const sendEmail = async ({ to, subject, html }) => {
   try {
     if (!to) return // no notification email configured — skip silently
     await resend.emails.send({
-      from: "StudioBits Tech <onboarding@resend.dev>",
+      from: "StudioBits Tech <https://www.studibits.com>",
       to,
       subject,
       html,

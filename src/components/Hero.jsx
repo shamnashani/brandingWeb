@@ -1,154 +1,187 @@
-import React, { useEffect, useRef, useState } from "react";
-import { ArrowUpRight, MessageCircle } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { ArrowRight, MessageCircle } from "lucide-react";
 
-import filmVideo from "../assets/videos/film.mp4";
-import constructionVideo from "../assets/videos/construction.mp4";
-import technologyVideo from "../assets/videos/tech.mp4";
+import techImg from "../assets/images/tech.png";
+import filmImg from "../assets/images/film.jpg";
+import constructionImg from "../assets/images/construction.jpg";
+
+const SLIDE_DURATION = 5000; // 5 seconds per division
 
 function Hero() {
   const slides = [
     {
-      key: "technology",
+      key: "tech",
       eyebrow: "StudioBits Tech",
-      title: "Driving",
-      highlight: "Innovation",
-      desc: "Building websites tailored to your vision and requirements.",
-      video: technologyVideo,
+      title: "Powering",
+      highlight: "Digital Innovation",
+      desc: "We help businesses embrace the future through intelligent software, scalable digital solutions, and transformative technology services that drive growth and efficiency.",
+      image: techImg,
       sectionId: "tech",
     },
     {
       key: "film",
       eyebrow: "Film Division",
-      title: "Creating",
-      highlight: "Stories",
-      desc: "Bringing cinematic visions to life through creativity and excellence.",
-      video: filmVideo,
+      title: "Where Creativity",
+      highlight: "Meets The Camera",
+      desc: "From concept development and scriptwriting to production and post-production, we create films, advertisements, and visual content that tell stories with impact.",
+      image: filmImg,
       sectionId: "film",
     },
     {
       key: "construction",
       eyebrow: "Construction & Interior",
-      title: "Building",
-      highlight: "Futures",
-      desc: "Delivering reliable construction solutions with precision and quality.",
-      video: constructionVideo,
+      title: "Building Spaces",
+      highlight: "That Inspire",
+      desc: "We design and build exceptional spaces that blend innovation, functionality, and elegance — crafted to deliver lasting quality and meaningful experiences.",
+      image: constructionImg,
       sectionId: "construction",
     },
   ];
 
   const [current, setCurrent] = useState(0);
-  const videoRef = useRef(null);
+  const [progressKey, setProgressKey] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrent((prev) => (prev + 1) % slides.length);
-    }, 7000);
+      setProgressKey((k) => k + 1);
+    }, SLIDE_DURATION);
     return () => clearInterval(interval);
   }, [slides.length]);
 
-  useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.currentTime = 0;
-      videoRef.current.play().catch(() => {});
-    }
-  }, [current]);
-
-  const slide = slides[current];
+  const goTo = (index) => {
+    setCurrent(index);
+    setProgressKey((k) => k + 1);
+  };
 
   const scrollToSection = (id) => {
     const section = document.getElementById(id);
     section?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
+  const slide = slides[current];
+
   return (
-    <section className="relative bg-white pt-28 pb-16 px-4 sm:px-8 lg:px-16">
-      <div className="mx-auto max-w-[1500px]">
+    <section className="relative bg-gradient-to-b from-[#0A0A0A] via-[#061A24] to-[#02141C] pt-32 pb-20 px-6 lg:px-12 overflow-hidden">
 
-        {/* ROUNDED VIDEO CARD — padded on all sides */}
-        <div className="relative w-full aspect-[16/9] sm:aspect-[21/9] rounded-[28px] overflow-hidden">
+      {/* Ambient glow, subtle, matches theme accent colors */}
+      <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] rounded-full bg-[#F8B400]/5 blur-[160px] pointer-events-none" />
+      <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] rounded-full bg-[#0E7490]/10 blur-[140px] pointer-events-none" />
 
-          <video
-            key={slide.key}
-            ref={videoRef}
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="absolute inset-0 w-full h-full object-cover"
-          >
-            <source src={slide.video} type="video/mp4" />
-          </video>
+      <div className="relative mx-auto max-w-7xl">
 
-          {/* Gradient for text legibility, not a flat dark overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/10" />
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
 
-          {/* TEXT CONTENT — changes with slide */}
-          <div className="absolute inset-0 flex flex-col justify-end p-6 sm:p-10 lg:p-14">
-
+          {/* LEFT — text content, changes per slide */}
+          <div>
+            {/* Eyebrow — hidden on phone, keeps mobile view minimal */}
             <p
               key={`eyebrow-${slide.key}`}
-              className="text-[11px] uppercase tracking-[0.35em] text-[#d4af37] mb-4 animate-fadeUp"
+              className="hidden sm:block text-[#F8B400] uppercase tracking-[4px] text-xs sm:text-sm font-semibold mb-5 animate-fadeUp"
             >
               {slide.eyebrow}
             </p>
 
+            {/* Main heading — always visible, the only text shown on phone */}
             <h1
               key={`title-${slide.key}`}
-              className="text-4xl sm:text-6xl lg:text-7xl font-light leading-[0.95] text-white animate-fadeUp"
+              className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-white leading-tight mb-6 animate-fadeUp"
             >
               {slide.title}
               <br />
-              <span className="font-semibold text-[#d4af37]">
-                {slide.highlight}
-              </span>
+              <span className="text-[#0E7490]">{slide.highlight}</span>
             </h1>
 
+            {/* Description — hidden on phone */}
             <p
               key={`desc-${slide.key}`}
-              className="mt-5 max-w-md text-sm sm:text-base leading-6 text-gray-300 animate-fadeUp"
+              className="hidden sm:block text-gray-400 text-base sm:text-lg leading-relaxed max-w-xl mb-9 animate-fadeUp"
             >
               {slide.desc}
             </p>
 
-            {/* BUTTON ROW — Explore + Contact Us, matched sizing */}
-            <div className="mt-7 flex flex-wrap items-center gap-4">
+            {/* BUTTONS — Explore hidden on phone, Contact shown everywhere */}
+            <div className="flex flex-wrap items-center gap-4 mt-6 sm:mt-0">
               <button
                 onClick={() => scrollToSection(slide.sectionId)}
-                className="inline-flex w-fit items-center gap-2 bg-[#F8B400] text-black px-6 py-3 rounded-full text-sm font-semibold hover:scale-105 transition-all duration-300"
+                className="hidden sm:inline-flex group items-center gap-2 bg-[#F8B400] hover:brightness-110 text-black px-7 py-3.5 rounded-full text-sm sm:text-base font-semibold transition-all duration-300"
               >
                 Explore {slide.eyebrow.split(" ")[0]}
-                <ArrowUpRight size={16} />
+                <ArrowRight
+                  size={18}
+                  className="transition-transform duration-300 group-hover:translate-x-1"
+                />
               </button>
 
               <button
                 onClick={() => scrollToSection("contact-cta")}
-                className="inline-flex w-fit items-center gap-2 border border-white/20 hover:border-[#0E7490] hover:bg-[#0E7490]/10 text-white px-6 py-3 rounded-full text-sm font-medium hover:scale-105 transition-all duration-300"
+                className="inline-flex items-center gap-2 bg-[#F8B400] sm:bg-transparent border border-[#F8B400] hover:bg-[#F8B400]/10 text-black sm:text-[#F8B400] px-7 py-3.5 rounded-full text-sm sm:text-base font-semibold transition-all duration-300 w-full sm:w-auto justify-center"
               >
-                <MessageCircle size={16} />
+                <MessageCircle size={18} />
                 Contact Us
               </button>
             </div>
 
+            {/* Progress indicators — thin bars that fill over the slide duration */}
+            <div className="flex gap-2 mt-12">
+              {slides.map((s, i) => (
+                <button
+                  key={s.key}
+                  onClick={() => goTo(i)}
+                  className="relative h-[3px] flex-1 max-w-[64px] rounded-full bg-white/10 overflow-hidden"
+                >
+                  {i === current && (
+                    <span
+                      key={progressKey}
+                      className="absolute inset-y-0 left-0 bg-[#F8B400] rounded-full"
+                      style={{
+                        animation: `fillBar ${SLIDE_DURATION}ms linear forwards`,
+                      }}
+                    />
+                  )}
+                  {i < current && (
+                    <span className="absolute inset-0 bg-[#F8B400] rounded-full" />
+                  )}
+                </button>
+              ))}
+            </div>
           </div>
 
-          {/* Slide indicators — inside the card, bottom right */}
-          <div className="absolute bottom-6 right-6 sm:bottom-10 sm:right-10 flex gap-2">
-            {slides.map((s, i) => (
-              <button
-                key={s.key}
-                onClick={() => setCurrent(i)}
-                className={`h-[3px] rounded-full transition-all duration-500 ${
-                  current === i ? "w-8 bg-[#d4af37]" : "w-4 bg-white/30 hover:bg-white/50"
-                }`}
-              />
-            ))}
+          {/* RIGHT — image, changes per slide with crossfade */}
+          <div className="relative">
+            <div className="relative aspect-[4/5] sm:aspect-[5/4] lg:aspect-[4/5] rounded-3xl overflow-hidden shadow-[0_30px_80px_rgba(0,0,0,0.5)]">
+              {slides.map((s, i) => (
+                <img
+                  key={s.key}
+                  src={s.image}
+                  alt={s.eyebrow}
+                  className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+                    i === current ? "opacity-100" : "opacity-0"
+                  }`}
+                />
+              ))}
+
+              {/* Subtle gradient overlay for depth */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+
+              {/* Division label chip, bottom-left of image */}
+              <div className="absolute bottom-5 left-5 flex items-center gap-2 bg-black/40 backdrop-blur-md border border-white/10 rounded-full px-4 py-2">
+                <span className="w-2 h-2 rounded-full bg-[#F8B400] animate-pulse" />
+                <span className="text-white text-xs sm:text-sm font-medium">
+                  {slide.eyebrow}
+                </span>
+              </div>
+            </div>
+
+            {/* Decorative accent ring behind image */}
+            <div className="absolute -z-10 -top-6 -right-6 w-full h-full rounded-3xl border border-[#F8B400]/20 hidden sm:block" />
           </div>
 
         </div>
 
       </div>
 
-      {/* Local keyframes for text transition */}
+      {/* Keyframes for text fade + progress bar fill */}
       <style>{`
         @keyframes fadeUp {
           from { opacity: 0; transform: translateY(14px); }
@@ -156,6 +189,10 @@ function Hero() {
         }
         .animate-fadeUp {
           animation: fadeUp 0.6s ease forwards;
+        }
+        @keyframes fillBar {
+          from { width: 0%; }
+          to { width: 100%; }
         }
       `}</style>
     </section>
