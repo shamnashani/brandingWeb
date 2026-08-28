@@ -50,7 +50,7 @@ function Hero() {
   useEffect(() => {
     if (videoRef.current) {
       videoRef.current.currentTime = 0;
-      videoRef.current.play().catch(() => {});
+      videoRef.current.play().catch(() => { });
     }
   }, [current]);
 
@@ -139,9 +139,8 @@ function Hero() {
                 key={s.key}
                 onClick={() => setCurrent(i)}
                 aria-label={`Show ${s.eyebrow} slide`}
-                className={`h-[3px] rounded-full transition-all duration-500 ${
-                  current === i ? "w-8 bg-[#d4af37]" : "w-4 bg-white/30 hover:bg-white/50"
-                }`}
+                className={`h-[3px] rounded-full transition-all duration-500 ${current === i ? "w-8 bg-[#d4af37]" : "w-4 bg-white/30 hover:bg-white/50"
+                  }`}
               />
             ))}
           </div>
