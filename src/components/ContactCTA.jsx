@@ -36,7 +36,7 @@ const ContactCTA = ({ division = "tech" }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (!form.name || !form.email || !form.message) return
+    if (!form.name || !form.email) return
 
     setStatus("sending")
     try {
