@@ -229,15 +229,16 @@ router.post("/forgot-password", async (req, res) => {
 
      const resetLink = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
     // transporter 
-    const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 587,
-      secure: false,
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-    });
+const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+  family: 4,
+});
 
     //  send email 
     await transporter.sendMail({
