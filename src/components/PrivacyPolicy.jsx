@@ -164,10 +164,10 @@ const PrivacyPolicy = () => {
               <p className="mt-8 text-center text-xs text-gray-500">
                 Questions about this policy? Reach out at{" "}
                 <a
-                  href="mailto:hello@studiobits.dev"
+                  href="mailto:notifications@studibits.com"
                   className="text-[#b8912c] hover:underline"
                 >
-                  hello@studiobits.dev
+                  notifications@studibits.com
                 </a>
               </p>
 
