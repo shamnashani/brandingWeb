@@ -15,6 +15,7 @@ function Login() {
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [confirmpassword, setconfirmpassword] = useState("");
   const [name, setname] = useState("");
+  const [successMsg, setSuccessMsg] = useState("");
 
   const nav = useNavigate();
   const location = useLocation();
@@ -29,6 +30,16 @@ function Login() {
     const token = localStorage.getItem("token");
     if (token) nav(redirectTo);
   }, [nav, redirectTo]);
+
+  useEffect(() => {
+    const msg = sessionStorage.getItem("authMessage");
+    if (msg) {
+      setSuccessMsg(msg);
+      sessionStorage.removeItem("authMessage");
+      const timer = setTimeout(() => setSuccessMsg(""), 4000);
+      return () => clearTimeout(timer);
+    }
+  }, []);
 
   const login = async (e) => {
     e.preventDefault();
@@ -150,6 +161,13 @@ function Login() {
       <div className="flex-1 flex items-center justify-center px-6 pb-16">
         <div className="w-full max-w-[400px]">
 
+          {successMsg && (
+            <p className="mb-5 flex items-center justify-center gap-1.5 rounded-lg border border-green-500/30 bg-green-500/10 px-3.5 py-2.5 text-sm text-green-400">
+              <CheckCircle2 size={15} />
+              {successMsg}
+            </p>
+          )}
+
           <h1 className="text-2xl font-semibold text-white text-center">
             {copy.title}
           </h1>
@@ -219,7 +237,7 @@ function Login() {
                     <button
                       type="button"
                       onClick={() => setMode("forgot")}
-                      className="text-xs text-[#d4af37] cursor-pointer hover:underline"
+                      className="text-xs text-gray-500 hover:text-[#d4af37] transition"
                     >
                       Forgot?
                     </button>

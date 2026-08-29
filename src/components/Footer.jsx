@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { HashLink } from "react-router-hash-link";
 import { MapPin, Mail } from "lucide-react";
 
@@ -13,6 +13,7 @@ import api from "./Api";
 
 function Footer() {
     const location = useLocation();
+    const nav = useNavigate();
   const [social, setSocial] = useState({
     instagram: "",
     facebook: "",
@@ -48,22 +49,31 @@ const socialLinks = [
     key: "instagram",
     icon: FaInstagram,
     url: social.instagram,
-    color: "hover:text-pink-500",
+    bg: "bg-gradient-to-tr from-[#FEDA75] via-[#D62976] to-[#4F5BD5]",
   },
   {
     key: "facebook",
     icon: FaFacebookF,
     url: social.facebook,
-    color: "hover:text-blue-500",
+    bg: "bg-[#1877F2]",
   },
-
   {
     key: "linkedin",
     icon: FaLinkedin,
     url: social.linkedin,
-    color: "hover:text-blue-500",
+    bg: "bg-[#0A66C2]",
   },
 ];
+
+  const handleLeaveReview = (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem("token");
+    if (token) {
+      nav("/submit-review");
+    } else {
+      nav("/login", { state: { redirectTo: "/submit-review" } });
+    }
+  };
 
   return (
     <footer className="bg-[#0A0A0A] text-white border-t border-white/10">
@@ -206,6 +216,7 @@ const socialLinks = [
               <li>
                 <Link
                   to="/submit-review"
+                  onClick={handleLeaveReview}
                   className="hover:text-white transition"
                 >
                   Leave Review
@@ -292,16 +303,14 @@ const socialLinks = [
                       w-10
                       h-10
                       rounded-full
-                      border
-                      border-white/10
-                      bg-white/5
                       flex
                       items-center
                       justify-center
-                      text-gray-400
-                      ${socialItem.color}
-                      hover:bg-white/10
-                      hover:border-white/20
+                      text-white
+                      shadow-lg
+                      ${socialItem.bg}
+                      hover:scale-110
+                      hover:shadow-xl
                       transition-all
                       duration-300
                     `}

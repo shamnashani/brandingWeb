@@ -34,7 +34,7 @@ function ResetPass() {
     setLoading(true);
     try {
       const res = await api.post(`/user/reset-password/${token}`, { password });
-      alert(res.data.message);
+      sessionStorage.setItem("authMessage", res.data.message || "Password reset successfully");
       nav("/login");
     } catch (err) {
       setError(err.response?.data?.message || "Invalid or expired link");
