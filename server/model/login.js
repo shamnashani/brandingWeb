@@ -3,7 +3,11 @@ const mongo = require('mongoose')
 const loginscheema = new mongo.Schema({
     name: { type: String, required: true, trim: true },
     email: { type: String, required: true, unique: true, lowercase: true },
-    password: { type: String, required: true },
+password: {
+  type: String,
+  required: false,
+  default: null
+},
     role: { type: String, required: true, enum: ["admin", "user"] },
     phone: { type: String },
     photo: String,

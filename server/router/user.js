@@ -141,52 +141,74 @@ router.post("/google-login", async (req, res) => {
     const { token } = req.body;
 
     if (!token) {
-      return res.status(400).json({ message: "No token provided" });
+      return res.status(400).json({
+        message: "No token provided",
+      });
     }
 
-    // Verify Google token
-    const ticket = await client.verifyIdToken({
-      idToken: token,
-      audience: process.env.GOOGLE_CLIENT_ID,
+    // Get Google user info using access token
+    const response = await fetch(
+      "https://www.googleapis.com/oauth2/v3/userinfo",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    const payload = await response.json();
+
+    if (!payload.email) {
+      return res.status(401).json({
+        message: "Invalid Google token",
+      });
+    }
+
+    const { name, email, picture } = payload;
+
+    // Find existing user
+    let user = await login.findOne({
+      email: email.toLowerCase(),
     });
 
-    const payload = ticket.getPayload();
-
-    const { name, email, picture} = payload;
-
-    // Check user
-    let user = await login.findOne({ email });
-
+    // Create user if not exists
     if (!user) {
-      // Create new user
       user = new login({
         name,
-        email,
-        password: null, // no password for Google users
+        email: email.toLowerCase(),
+        password: null,
         role: "user",
-        photo: picture, // store Google profile pic
+        photo: picture,
       });
 
       await user.save();
     }
 
-    // Check if blocked
+    // Block inactive users
     if (user.status === "inactive") {
       return res.status(403).json({
         message: "Your account is deactivated by admin",
       });
     }
 
-    // Update online status
+    // Update activity
     await login.findByIdAndUpdate(user._id, {
       online: true,
+      status: "active",
+      lastActive: new Date(),
     });
 
-    // Create JWT 
+    // Generate JWT
     const jwtToken = jwt.sign(
-      { id: user._id, role: user.role, name: user.name },
+      {
+        id: user._id,
+        role: user.role,
+        name: user.name,
+      },
       process.env.JWT_SECRET,
-      { expiresIn: "7d" }
+      {
+        expiresIn: "7d",
+      }
     );
 
     res.json({
@@ -199,10 +221,11 @@ router.post("/google-login", async (req, res) => {
         role: user.role,
       },
     });
-
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Google login failed" });
+    console.error("GOOGLE LOGIN ERROR:", error);
+    res.status(500).json({
+      message: "Google login failed",
+    });
   }
 });
 
