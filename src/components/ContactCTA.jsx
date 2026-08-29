@@ -157,47 +157,49 @@ const ContactCTA = ({ division = "tech" }) => {
             />
 
             {/* PHONE */}
-            <PhoneInput
-              country="in"
-              enableSearch
-              countryCodeEditable={false}
-              value={form.phone}
-              onChange={(phone) =>
-                setForm((prev) => ({
-                  ...prev,
-                  phone,
-                }))
-              }
-              placeholder="Phone number *"
-              specialLabel=""
-              inputStyle={{
-                width: "100%",
-                height: "42px",
-                background: "#0a0a0a",
-                color: "#fff",
-                border: "1px solid rgba(255,255,255,0.1)",
-                borderRadius: "0",
-                fontSize: "14px",
-              }}
-              buttonStyle={{
-                background: "#d4af37",
-                border: "1px solid rgba(212,175,55,0.4)",
-                borderRadius: "0",
-              }}
-              dropdownStyle={{
-                background: "#0a0a0a",
-                color: "#fff",
-              }}
-              searchStyle={{
-                background: "#0a0a0a",
-                color: "#fff",
-                border: "1px solid rgba(255,255,255,0.2)",
-                colorScheme: "dark",
-              }}
-              containerStyle={{
-                width: "100%",
-              }}
-            />
+<PhoneInput
+  country="in"
+  enableSearch
+  countryCodeEditable={false}
+  value={form.phone}
+  onChange={(phone) =>
+    setForm((prev) => ({ ...prev, phone }))
+  }
+  required
+  specialLabel=""
+  containerStyle={{
+    width: "100%",
+  }}
+  inputStyle={{
+    width: "100%",
+    height: "42px",
+    background: "transparent",
+    color: "#575252",
+    border: "none",
+    borderBottom: "1px solid rgba(255,255,255,0.15)",
+    borderRadius: "0",
+    paddingLeft: "48px",
+    fontSize: "14px",
+    outline: "none",
+  }}
+  buttonStyle={{
+    background: "transparent",
+    border: "none",
+    borderBottom: "1px solid rgba(255,255,255,0.15)",
+    borderRadius: "0",
+  }}
+  dropdownStyle={{
+    background: "#1d1c1c",
+    color: "#5b5757",
+    border: "1px solid rgba(255,255,255,0.15)",
+  }}
+  searchStyle={{
+    background: "#111111",
+    color: "#211f1f",
+    border: "1px solid rgba(255,255,255,0.15)",
+    width: "90%",
+  }}
+/>
 
             {/* MESSAGE */}
             <textarea
