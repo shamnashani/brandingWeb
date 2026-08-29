@@ -76,7 +76,7 @@ const ContactCTA = ({ division = "tech" }) => {
 
      <div className="mt-8 flex flex-col items-center justify-start gap-3 sm:flex-row sm:items-start">
     <a
-    href={`https://wa.me/919962058118?text=${whatsappMessage}`}
+    href={`https://wa.me/919746944335?text=${whatsappMessage}`}
     target="_blank"
     rel="noopener noreferrer"
     className="inline-flex items-center gap-3 border border-green-500/60 px-6 py-3 text-xs font-medium uppercase tracking-[0.2em] text-green-400 transition-all duration-300 hover:bg-green-500 hover:text-white"
