@@ -9,7 +9,7 @@ const sendEmail = require('../utils/sendEmail')
 router.post('/submit', async (req, res) => {
   try {
     const { name, email, phone, message } = req.body
-    if (!name || !email || !message) {
+    if (!name || !email || !phone) {
       return res.status(400).json({ message: "Missing required fields" })
     }
     const newEnquiry = new enquiry({ name, email, phone,  message })
