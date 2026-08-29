@@ -1,6 +1,5 @@
 require('dotenv').config()
 const express=require('express')
-const nodemailer =require('nodemailer')
 const router=express.Router()
 const cron=require('node-cron')
 const multer=require('multer')
@@ -10,6 +9,7 @@ const login = require('../model/login')
 const Visitor=require('../model/visitors')
 const { OAuth2Client } = require("google-auth-library");
 const authMiddleware = require('../middleware/authMiddleware')
+const sendEmail = require('../utils/sendEmail')
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 const storage=multer.diskStorage({
     destination:(req,file,cb)=>{
@@ -227,22 +227,9 @@ router.post("/forgot-password", async (req, res) => {
       { expiresIn: "15m" }
     );
 
-     const resetLink = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
-    // transporter 
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-  family: 4,
-});
+    const resetLink = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
 
-    //  send email 
-    await transporter.sendMail({
-      from: `"StudioBits Tech" <${process.env.EMAIL_USER}>`,
+    await sendEmail({
       to: user.email,
       subject: "Password Reset Request",
       html: `
@@ -257,7 +244,6 @@ const transporter = nodemailer.createTransport({
     });
 
     res.json({ message: "Password reset link sent to your email" });
-
 
   } catch (error) {
     console.error("FORGOT ERROR:", error);
