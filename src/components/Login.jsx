@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Eye, EyeOff, ArrowRight } from "lucide-react";
 import api from "./Api";
 import { useNavigate, useLocation } from "react-router-dom";
-import { GoogleLogin } from "@react-oauth/google";
+import { useGoogleLogin } from "@react-oauth/google";
 
 function Login() {
   const [email, setemail] = useState("");
@@ -10,6 +10,7 @@ function Login() {
   const [mode, setMode] = useState("login");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [confirmpassword, setconfirmpassword] = useState("");
   const [name, setname] = useState("");
@@ -47,9 +48,9 @@ function Login() {
   const Signup = async (e) => {
     e.preventDefault();
     if (!acceptTerms) {
-    alert("Please accept the Terms & Conditions");
-    return;
-  }
+      alert("Please accept the Terms & Conditions");
+      return;
+    }
     if (password !== confirmpassword) {
       alert("Passwords do not match");
       return;
@@ -57,7 +58,7 @@ function Login() {
     setLoading(true);
     try {
       const res = await api.post("/user/signup", {
-        name, email, password, confirmpassword, 
+        name, email, password, confirmpassword,
       });
       localStorage.setItem("token", res.data.token);
       nav(redirectTo);
@@ -81,6 +82,41 @@ function Login() {
     }
   };
 
+  // ===== Custom-styled Google login (bypasses default GSI/FedCM embed) =====
+  const googleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      setGoogleLoading(true);
+      try {
+        // useGoogleLogin (implicit flow) returns an access_token, not an id_token.
+        // Fetch the user's profile with it, then hand off to your existing backend route.
+        const profileRes = await fetch(
+          "https://www.googleapis.com/oauth2/v3/userinfo",
+          { headers: { Authorization: `Bearer ${tokenResponse.access_token}` } }
+        );
+        const profile = await profileRes.json();
+
+        const res = await api.post("/user/google-login", {
+          token: tokenResponse.access_token,
+          profile, // name, email, picture — in case backend wants to skip re-verifying
+        });
+
+        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("userId", res.data.user.id);
+        localStorage.setItem("role", res.data.user.role);
+        nav("/");
+      } catch (err) {
+        console.log(err);
+        alert("Google sign-in failed");
+      } finally {
+        setGoogleLoading(false);
+      }
+    },
+    onError: () => {
+      console.log("Google Login Failed");
+      alert("Google sign-in failed");
+    },
+  });
+
   const handler =
     mode === "login" ? login : mode === "signup" ? Signup : ForgotPass;
 
@@ -95,10 +131,10 @@ function Login() {
 
       <div className="px-6 sm:px-10 py-6">
         <img
-  src="/studiobits.png"
-  alt="StudioBits Technology"
-  className="h-20 sm:h-16 md:h-20 w-auto object-contain"
-/>
+          src="/studiobits.png"
+          alt="StudioBits Technology"
+          className="h-20 sm:h-16 md:h-20 w-auto object-contain"
+        />
       </div>
 
       <div className="flex-1 flex items-center justify-center px-6 pb-16">
@@ -113,24 +149,26 @@ function Login() {
 
           {mode === "login" && (
             <>
-<div className="[&>div]:!w-full [&_iframe]:!w-full mb-5">
-  <GoogleLogin
-    onSuccess={async (credentialResponse) => {
-      try {
-        const res = await api.post("/user/google-login", {
-          token: credentialResponse.credential,
-        });
-        localStorage.setItem("token", res.data.token);
-        localStorage.setItem("userId", res.data.user.id);
-        localStorage.setItem("role", res.data.user.role);
-        nav("/");
-      } catch (err) {
-        console.log(err);
-      }
-    }}
-    onError={() => console.log("Google Login Failed")}
-  />
-</div>
+              <button
+                type="button"
+                onClick={() => googleLogin()}
+                disabled={googleLoading}
+                className="mb-5 flex w-full items-center justify-center gap-3 rounded-lg border border-white/10 bg-[#141414] py-2.5 text-sm font-medium text-white transition hover:bg-[#1a1a1a] disabled:opacity-60"
+              >
+                {googleLoading ? (
+                  "Signing in…"
+                ) : (
+                  <>
+                    <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
+                      <path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84c-.21 1.13-.84 2.09-1.8 2.73v2.27h2.91c1.7-1.57 2.69-3.88 2.69-6.64z"/>
+                      <path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.91-2.27c-.81.54-1.84.86-3.05.86-2.34 0-4.33-1.58-5.04-3.71H.96v2.34C2.44 15.98 5.48 18 9 18z"/>
+                      <path fill="#FBBC05" d="M3.96 10.71A5.4 5.4 0 010 9c0-.6.1-1.18.29-1.71V4.95H.96A9 9 0 000 9c0 1.45.35 2.83.96 4.05l3-2.34z"/>
+                      <path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.58C13.46.9 11.43 0 9 0 5.48 0 2.44 2.02.96 4.95l3 2.34C4.67 5.16 6.66 3.58 9 3.58z"/>
+                    </svg>
+                    Continue with Google
+                  </>
+                )}
+              </button>
 
               <div className="flex items-center gap-3 mb-5">
                 <div className="flex-1 h-px bg-white/10" />
@@ -145,16 +183,13 @@ function Login() {
           <form onSubmit={handler} className="flex flex-col gap-3.5">
 
             {mode === "signup" && (
-              <>
-                <div>
-                  <label className="text-xs text-gray-400 mb-1.5 block">Full name</label>
-                  <input
-                    type="text" value={name} onChange={(e) => setname(e.target.value)}
-                    className="w-full bg-[#141414] border border-white/10 rounded-lg px-3.5 py-2.5 text-sm text-white outline-none focus:border-[#d4af37]/60 transition"
-                  />
-                </div>
-
-              </>
+              <div>
+                <label className="text-xs text-gray-400 mb-1.5 block">Full name</label>
+                <input
+                  type="text" value={name} onChange={(e) => setname(e.target.value)}
+                  className="w-full bg-[#141414] border border-white/10 rounded-lg px-3.5 py-2.5 text-sm text-white outline-none focus:border-[#d4af37]/60 transition"
+                />
+              </div>
             )}
 
             <div>
@@ -207,27 +242,27 @@ function Login() {
               </div>
             )}
             {mode === "signup" && (
-  <div className="flex items-start gap-2 text-sm">
-    <input
-      type="checkbox"
-      id="terms"
-      checked={acceptTerms}
-      onChange={(e) => setAcceptTerms(e.target.checked)}
-      className="mt-1"
-    />
+              <div className="flex items-start gap-2 text-sm">
+                <input
+                  type="checkbox"
+                  id="terms"
+                  checked={acceptTerms}
+                  onChange={(e) => setAcceptTerms(e.target.checked)}
+                  className="mt-1"
+                />
 
-    <label htmlFor="terms" className="text-gray-400">
-      I agree to the{" "}
-      <a href="/t&c" className="text-[#d4af37] hover:underline">
-        Terms & Conditions
-      </a>{" "}
-      and{" "}
-      <a href="/privacy-policy" className="text-[#d4af37] hover:underline">
-        Privacy Policy
-      </a>
-    </label>
-  </div>
-)}
+                <label htmlFor="terms" className="text-gray-400">
+                  I agree to the{" "}
+                  <a href="/t&c" className="text-[#d4af37] hover:underline">
+                    Terms & Conditions
+                  </a>{" "}
+                  and{" "}
+                  <a href="/privacy-policy" className="text-[#d4af37] hover:underline">
+                    Privacy Policy
+                  </a>
+                </label>
+              </div>
+            )}
 
             <button
               type="submit"
