@@ -160,16 +160,16 @@ const PrivacyPolicy = () => {
                 }}
               />
 
-              {/* Contact note */}
-              <p className="mt-8 text-center text-xs text-gray-500">
-                Questions about this policy? Reach out at{" "}
-                <a
-                  href="mailto:notifications@studibits.com"
-                  className="text-[#b8912c] hover:underline"
-                >
-                  notifications@studibits.com
-                </a>
-              </p>
+<p className="mt-8 text-center text-xs text-gray-500">
+  Questions about these terms? Reach out at{" "}
+  <a href="mailto:studibits@gmail.com" className="text-[#b8912c] hover:underline">
+    studibits@gmail.com
+  </a>{" "}
+  or{" "}
+  <a href="mailto:info@studibits.com" className="text-[#b8912c] hover:underline">
+    info@studibits.com
+  </a>
+</p>
 
             </div>
           </section>

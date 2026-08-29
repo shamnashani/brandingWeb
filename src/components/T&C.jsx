@@ -159,11 +159,6 @@ const TermsAndConditions = () => {
               its conflict of law provisions.
             </p>
 
-            <h2>12. Contact Us</h2>
-            <p>
-              If you have any questions about these Terms & Conditions, please reach out to us at{" "}
-              <a href="mailto:studibits@gmail.com">studibits@gmail.com</a>.
-            </p>
           </div>
 
           {/* Contact note */}
