@@ -219,7 +219,7 @@ function Login() {
                     <button
                       type="button"
                       onClick={() => setMode("forgot")}
-                      className="text-xs text-gray-500 hover:text-[#d4af37] transition"
+                      className="text-xs text-[#d4af37] cursor-pointer hover:underline"
                     >
                       Forgot?
                     </button>
