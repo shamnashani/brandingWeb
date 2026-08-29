@@ -115,30 +115,31 @@ return (
       <div className="flex justify-between items-center h-[92px]">
 
         {/* Logo + tagline */}
-        <Link to="/" className="flex items-center gap-3 shrink-0">
-          <div className="leading-tight">
-            {isS1?(
-              <>
-              <img
-                src="/s1.avif"
-         alt="S1 creations"
-         className="h-20 sm:h-16 md:h-20 w-auto object-contain"
-/>
-  
-            </>
-            ):(
-                            <>
-           <img
-  src="/studiobits.png"
-  alt="StudioBits Technology"
-  className="h-20 sm:h-16 md:h-20 w-auto object-contain"
-/>
-            </>
+<Link to="/" className="flex items-center shrink-0">
+  {isS1 ? (
+    <img
+      src="/s1.avif"
+      alt="S1 Creations"
+      className="h-14 sm:h-16 md:h-20 w-auto object-contain"
+    />
+  ) : (
+    <>
+      {/* Mobile: Icon only */}
+      <img
+        src="/studiobits-icon.png"
+        alt="StudioBits"
+        className="h-12 w-auto sm:hidden"
+      />
 
-            )
-                     }
-          </div>
-        </Link>
+      {/* Tablet & Desktop: Full Logo */}
+      <img
+        src="/studiobits.png"
+        alt="StudioBits Technology"
+        className="hidden sm:block h-16 md:h-20 w-auto object-contain"
+      />
+    </>
+  )}
+</Link>
 
           {/* Desktop Menu */}
           <div className="hidden lg:flex items-center gap-9">
