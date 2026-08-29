@@ -421,7 +421,7 @@ const fetchServices = async () => {
         <div className="relative h-[280px] overflow-hidden">
 
           <img
-            src={`http://localhost:4000/media/${project.photo}`}
+            src={`${api.defaults.baseURL}/media/${project.photo}`}
             alt={project.title}
             className="h-full w-full object-cover transition duration-700 group-hover:scale-110"
             onError={(e) => {

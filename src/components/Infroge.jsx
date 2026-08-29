@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "./Navbar";
-import axios from "axios";
+import api from "./Api";
 import ContactCTA from "./ContactCTA";
 import Footer from "./Footer";
 import SEO from './SEO'
@@ -21,8 +21,8 @@ const Infroge = () => {
 
   const fetchProjects = async () => {
     try {
-      const res = await axios.get(
-        "http://localhost:4000/project/viewprojects?page=infroge"
+      const res = await api.get(
+        "/project/viewprojects?page=infroge"
       );
 
       if (res.data.status === "ok") {
@@ -36,8 +36,8 @@ const Infroge = () => {
 
   const fetchServices = async () => {
     try {
-      const res = await axios.get(
-        "http://localhost:4000/service/viewservices?page=infroge"
+      const res = await api.get(
+        "/service/viewservices?page=infroge"
       );
 
       if (res.data.status === "ok") {
@@ -306,7 +306,7 @@ const Infroge = () => {
                     {/* Image */}
                     <div className="overflow-hidden md:col-span-4">
                       <img
-                        src={`http://localhost:4000/media/${service.photo}`}
+                        src={`${api.defaults.baseURL}/media/${service.photo}`}
                         alt={service.title}
                         className="h-[190px] w-full object-cover transition duration-700 group-hover:scale-105 md:h-[210px]"
                         onError={(e) => {
@@ -411,7 +411,7 @@ const Infroge = () => {
                     <div className="relative h-[280px] overflow-hidden md:h-[320px]">
 
                       <img
-                        src={`http://localhost:4000/media/${project.photo}`}
+                        src={`${api.defaults.baseURL}/media/${project.photo}`}
                         alt={project.title}
                         className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
                         onError={(e) => {
