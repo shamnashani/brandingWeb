@@ -253,7 +253,7 @@ function Login() {
 
                 <label htmlFor="terms" className="text-gray-400">
                   I agree to the{" "}
-                  <a href="/t&c" className="text-[#d4af37] hover:underline">
+                  <a href="/terms-and-conditions" className="text-[#d4af37] hover:underline">
                     Terms & Conditions
                   </a>{" "}
                   and{" "}
