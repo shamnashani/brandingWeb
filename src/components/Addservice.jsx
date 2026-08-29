@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import api from "./Api";
 
 const Addservice = () => {
   const nav = useNavigate();
@@ -22,14 +22,9 @@ const Addservice = () => {
     formData.append("photo", photo);
 
     try {
-      const res = await axios.post(
-        "http://localhost:4000/service/services",
+      const res = await api.post(
+        "/service/services",
         formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
       );
 
       if (res.data.status === "ok") {
