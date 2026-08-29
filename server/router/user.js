@@ -219,7 +219,7 @@ router.post("/google-login", async (req, res) => {
   } catch (error) {
     console.error("GOOGLE LOGIN ERROR:", error);
     res.status(500).json({
-      message: "Google login failed",
+      message: "This email is not registered. Please sign up first.",
     });
   }
 });
