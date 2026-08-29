@@ -146,7 +146,7 @@ router.post("/google-login", async (req, res) => {
       });
     }
 
-    // Get Google user info using access token
+    // Get Google user info
     const response = await fetch(
       "https://www.googleapis.com/oauth2/v3/userinfo",
       {
@@ -164,24 +164,19 @@ router.post("/google-login", async (req, res) => {
       });
     }
 
-    const { name, email, picture } = payload;
+    const { email } = payload;
 
-    // Find existing user
-    let user = await login.findOne({
+    // Check if user already exists
+    const user = await login.findOne({
       email: email.toLowerCase(),
     });
 
-    // Create user if not exists
+    // Do NOT create new users
     if (!user) {
-      user = new login({
-        name,
-        email: email.toLowerCase(),
-        password: null,
-        role: "user",
-        photo: picture,
+      return res.status(403).json({
+        message:
+          "This email is not registered. Please sign up first.",
       });
-
-      await user.save();
     }
 
     // Block inactive users
