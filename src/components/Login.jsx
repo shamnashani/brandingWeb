@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Eye, EyeOff, ArrowRight } from "lucide-react";
+import { Eye, EyeOff, ArrowRight, CheckCircle2 } from "lucide-react";
 import api from "./Api";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useGoogleLogin } from "@react-oauth/google";
@@ -9,6 +9,7 @@ function Login() {
   const [password, setpassword] = useState("");
   const [mode, setMode] = useState("login");
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [acceptTerms, setAcceptTerms] = useState(false);
@@ -18,6 +19,11 @@ function Login() {
   const nav = useNavigate();
   const location = useLocation();
   const redirectTo = location.state?.redirectTo || "/";
+
+  const passwordsMatch =
+    mode === "signup" && confirmpassword.length > 0 && password === confirmpassword;
+  const passwordTooShort =
+    mode === "signup" && password.length > 0 && password.length < 6;
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -49,6 +55,10 @@ function Login() {
     e.preventDefault();
     if (!acceptTerms) {
       alert("Please accept the Terms & Conditions");
+      return;
+    }
+    if (password.length < 6) {
+      alert("Password must be at least 6 characters");
       return;
     }
     if (password !== confirmpassword) {
@@ -219,6 +229,7 @@ function Login() {
                   <input
                     type={showPassword ? "text" : "password"}
                     value={password} onChange={(e) => setpassword(e.target.value)}
+                    autoComplete={mode === "signup" ? "new-password" : "current-password"}
                     className="w-full bg-[#141414] border border-white/10 rounded-lg px-3.5 py-2.5 pr-10 text-sm text-white outline-none focus:border-[#d4af37]/60 transition"
                   />
                   <button
@@ -229,16 +240,37 @@ function Login() {
                     {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                   </button>
                 </div>
+                {passwordTooShort && (
+                  <p className="mt-1.5 text-xs text-amber-400">
+                    Use at least 6 characters
+                  </p>
+                )}
               </div>
             )}
 
             {mode === "signup" && (
               <div>
                 <label className="text-xs text-gray-400 mb-1.5 block">Confirm password</label>
-                <input
-                  type="password" value={confirmpassword} onChange={(e) => setconfirmpassword(e.target.value)}
-                  className="w-full bg-[#141414] border border-white/10 rounded-lg px-3.5 py-2.5 text-sm text-white outline-none focus:border-[#d4af37]/60 transition"
-                />
+                <div className="relative">
+                  <input
+                    type={showConfirmPassword ? "text" : "password"}
+                    value={confirmpassword} onChange={(e) => setconfirmpassword(e.target.value)}
+                    autoComplete="new-password"
+                    className="w-full bg-[#141414] border border-white/10 rounded-lg px-3.5 py-2.5 pr-10 text-sm text-white outline-none focus:border-[#d4af37]/60 transition"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition"
+                  >
+                    {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </button>
+                </div>
+                {passwordsMatch && (
+                  <p className="mt-1.5 flex items-center gap-1.5 text-xs text-green-400">
+                    <CheckCircle2 size={13} /> Passwords match
+                  </p>
+                )}
               </div>
             )}
             {mode === "signup" && (
