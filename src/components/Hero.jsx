@@ -4,7 +4,6 @@ import { ArrowUpRight, MessageCircle } from "lucide-react";
 import filmVideo from "../assets/videos/film.mp4";
 import constructionVideo from "../assets/videos/construction.mp4";
 import technologyVideo from "../assets/videos/tech.mp4";
-import WhatsAppButton from "./WhatsAppButton";
 
 function Hero() {
   const slides = [
@@ -50,7 +49,7 @@ function Hero() {
   useEffect(() => {
     if (videoRef.current) {
       videoRef.current.currentTime = 0;
-      videoRef.current.play().catch(() => { });
+      videoRef.current.play().catch(() => {});
     }
   }, [current]);
 
@@ -139,8 +138,9 @@ function Hero() {
                 key={s.key}
                 onClick={() => setCurrent(i)}
                 aria-label={`Show ${s.eyebrow} slide`}
-                className={`h-[3px] rounded-full transition-all duration-500 ${current === i ? "w-8 bg-[#d4af37]" : "w-4 bg-white/30 hover:bg-white/50"
-                  }`}
+                className={`h-[3px] rounded-full transition-all duration-500 ${
+                  current === i ? "w-8 bg-[#d4af37]" : "w-4 bg-white/30 hover:bg-white/50"
+                }`}
               />
             ))}
           </div>
@@ -148,9 +148,6 @@ function Hero() {
         </div>
 
       </div>
-
-      {/* Floating WhatsApp button — persistent across the page */}
-      <WhatsAppButton />
 
       {/* Local keyframes for text transition */}
       <style>{`

@@ -6,7 +6,7 @@ import WhoWeAre from "./section2";
 import Divisions from "./section3";
 import WhyChooseUs from "./whychooseUs";
 import CTASection from "./CTASection";
-import ScrollToTopButton from "./ScrollToTopButton";
+import FloatingButtons from "./FloatingButtons";
 import ReviewsHome from "./ReviewsHome";
 import Footer from "./Footer";
 import SEO from './SEO'
@@ -41,7 +41,7 @@ useEffect(() => {
       <ReviewsHome/>
       <CTASection></CTASection>
       <Footer/>
-      <ScrollToTopButton/>
+      <FloatingButtons/>
     </>
   );
 }
