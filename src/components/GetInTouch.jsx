@@ -151,7 +151,7 @@ function GetInTouch() {
                   <div>
 
                     <p className="text-sm text-white">
-                      studiobits@gmail.com
+                      info@studibits.com
                     </p>
 
                     <p className="text-xs text-gray-600">
@@ -165,7 +165,7 @@ function GetInTouch() {
                 {/* WhatsApp */}
 
                 <a
-                  href="https://wa.me/919962058118?text=Hello%20StudioBits"
+                  href="https://wa.me/919746944335?text=Hello%20StudioBits"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-4 group"

@@ -263,7 +263,7 @@ const socialLinks = [
                 />
 
                 <span>
-                  studiobits@gmail.com
+                   info@studibits.com
                 </span>
 
               </p>
