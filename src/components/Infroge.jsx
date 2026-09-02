@@ -306,7 +306,7 @@ const Infroge = () => {
                     {/* Image */}
                     <div className="overflow-hidden md:col-span-4">
                       <img
-                        src={`${api.defaults.baseURL}/media/${service.photo}`}
+                        src={service.photo}
                         alt={service.title}
                         className="h-[190px] w-full object-cover transition duration-700 group-hover:scale-105 md:h-[210px]"
                         onError={(e) => {
@@ -411,7 +411,7 @@ const Infroge = () => {
                     <div className="relative h-[280px] overflow-hidden md:h-[320px]">
 
                       <img
-                        src={`${api.defaults.baseURL}/media/${project.photo}`}
+                        src={project.photo}
                         alt={project.title}
                         className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
                         onError={(e) => {

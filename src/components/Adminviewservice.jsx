@@ -287,11 +287,11 @@ const Adminviewservice = () => {
 
                     <div className="relative h-64 overflow-hidden bg-[#1a1a1a]">
 
-                       <img
-    src={`${api.defaults.baseURL}/media/${service.photo}`}
-    alt={service.title}
-    className="h-full w-full object-contain transition duration-500 group-hover:scale-105"
-  />
+<img
+  src={service.photo}
+  alt={service.title}
+  className="h-full w-full object-contain transition duration-500 group-hover:scale-105"
+/>
 
                       {/* Overlay */}
 

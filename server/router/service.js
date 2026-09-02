@@ -1,20 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const multer = require("multer");
-const path = require("path");
+const cloudinary = require("../config/Cloudinary");
+const storage = require("../config/CloudinaryStorage");
 const Service = require("../model/Service");
-const fs = require("fs");
 
-// ================= Multer Storage =================
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "media");
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
-  },
-});
+// ================= Multer Storage (Cloudinary-backed) =================
 
 const upload = multer({ storage });
 
@@ -24,13 +15,15 @@ router.post("/services", upload.single("photo"), async (req, res) => {
   try {
     const { title, description, page } = req.body;
 
-    const photo = req.file ? req.file.filename : "";
+    const photo = req.file ? req.file.path : "";        // Cloudinary URL
+    const photoId = req.file ? req.file.filename : "";   // Cloudinary public_id, for delete/replace
 
     const service = new Service({
       title,
       description,
       page,
       photo,
+      photoId,
     });
 
     await service.save();
@@ -115,22 +108,41 @@ router.put(
     try {
       const { title, description, page } = req.body;
 
+      const existing = await Service.findById(req.params.id);
+
+      if (!existing) {
+        return res.status(404).json({
+          status: "error",
+          message: "Service not found",
+        });
+      }
+
       const updateData = {
         title,
         description,
         page,
       };
 
+      // If a new image was uploaded — delete the old Cloudinary
+      // image first, then save the new one
       if (req.file) {
-        updateData.photo = req.file.filename;
+        if (existing.photoId) {
+          try {
+            await cloudinary.uploader.destroy(existing.photoId);
+          } catch (cloudErr) {
+            console.error("Cloudinary delete failed (old photo):", cloudErr.message);
+            // don't block the update just because cleanup failed
+          }
+        }
+
+        updateData.photo = req.file.path;
+        updateData.photoId = req.file.filename;
       }
 
       const service = await Service.findByIdAndUpdate(
         req.params.id,
         updateData,
-        {
-          new: true,
-        }
+        { new: true }
       );
 
       res.json({
@@ -167,16 +179,13 @@ router.delete("/service/:id", async (req, res) => {
       });
     }
 
-    // Delete image from media folder
-    if (service.photo) {
-      const imagePath = path.join(
-        __dirname,
-        "../media",
-        service.photo
-      );
-
-      if (fs.existsSync(imagePath)) {
-        fs.unlinkSync(imagePath);
+    // Delete image from Cloudinary
+    if (service.photoId) {
+      try {
+        await cloudinary.uploader.destroy(service.photoId);
+      } catch (cloudErr) {
+        console.error("Cloudinary delete failed:", cloudErr.message);
+        // still proceed to delete the DB record even if cloud cleanup fails
       }
     }
 

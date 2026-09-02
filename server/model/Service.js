@@ -24,6 +24,8 @@ const serviceSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    photoId: { type: String, default: "" },   // Cloudinary public_id, for delete/replace
+
   },
   {
     timestamps: true,

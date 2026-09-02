@@ -194,12 +194,11 @@ const AdminViewproject = () => {
       {/* Image */}
 
       <div className="relative h-64 overflow-hidden bg-[#1a1a1a]">
-
-        <img
-          src={`${api.defaults.baseURL}/media/${project.photo}`}
-          alt={project.title}
-          className="h-full w-full object-cover  transition duration-500 group-hover:scale-105"
-        />
+<img
+  src={project.photo}
+  alt={project.title}
+  className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+/>
 
         {/* Overlay */}
 

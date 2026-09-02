@@ -300,7 +300,7 @@ const fetchServices = async () => {
               <div className="overflow-hidden md:col-span-4">
 
                 <img
-                  src={`${api.defaults.baseURL}/media/${service.photo}`}
+                  src={service.photo}
                   alt={service.title}
                   className="h-[190px] w-full object-cover transition duration-700 group-hover:scale-105 md:h-[210px]"
                 />
@@ -421,7 +421,7 @@ const fetchServices = async () => {
         <div className="relative h-[280px] overflow-hidden">
 
           <img
-            src={`${api.defaults.baseURL}/media/${project.photo}`}
+            src={project.photo}
             alt={project.title}
             className="h-full w-full object-cover transition duration-700 group-hover:scale-110"
             onError={(e) => {

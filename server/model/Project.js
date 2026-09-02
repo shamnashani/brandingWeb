@@ -20,10 +20,9 @@ const projectSchema = new mongoose.Schema(
       enum: ["construction", "film", "infroge"],
     },
 
-    photo: {
-      type: String,
-      default: "",
-    },
+    photo: { type: String, default: "" },     
+    photoId: { type: String, default: "" },   // Cloudinary public_id, for delete/replace
+
   },
   {
     timestamps: true,

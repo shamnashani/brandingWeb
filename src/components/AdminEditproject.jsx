@@ -216,7 +216,7 @@ const AdminEditproject = () => {
                 <div className="overflow-hidden rounded-xl border border-gray-700 bg-[#1a1a1a]">
 
                   <img
-                    src={`${api.defaults.baseURL}/media/${currentPhoto}`}
+                    src={currentPhoto}
                     alt={title}
                     className="max-h-[400px] w-full object-contain"
                   />
