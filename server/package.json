@@ -2,10 +2,10 @@
   "name": "server",
   "version": "1.0.0",
   "main": "s1.js",
-"scripts": {
-  "start": "node s1.js",
-  "dev": "nodemon s1.js"
-},
+  "scripts": {
+    "start": "node s1.js",
+    "dev": "nodemon s1.js"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -14,6 +14,7 @@
     "@react-oauth/google": "^0.13.5",
     "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.3",
+    "cloudinary": "^1.41.3",
     "cors": "^2.8.6",
     "crypto": "^1.0.1",
     "dotenv": "^17.4.2",
@@ -22,6 +23,7 @@
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.8.0",
     "multer": "^2.2.0",
+    "multer-storage-cloudinary": "^4.0.0",
     "node-cron": "^4.6.0",
     "nodemailer": "^9.0.3",
     "nodemon": "^3.1.14",
