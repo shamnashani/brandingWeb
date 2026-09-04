@@ -21,7 +21,11 @@ password: {
         type: String,
         enum: ["active", "inactive"],
         default: "active"
-    }
+    },
+    online: {
+    type: Boolean,
+    default: false
+},
 }, { timestamps: true })
 
 const login = mongo.model('login', loginscheema)

@@ -358,5 +358,76 @@ cron.schedule("0 0 * * *", async () => {
   }
 });
 
+router.put('/status/:id', authMiddleware, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    if (!["active", "inactive"].includes(status)) {
+      return res.status(400).json({ message: "Status must be 'active' or 'inactive'" });
+    }
+
+    if (id === req.user.id) {
+      return res.status(403).json({ message: "You cannot change your own status" });
+    }
+
+    const targetUser = await login.findById(id);
+    if (!targetUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (targetUser.role === "admin") {
+      return res.status(403).json({ message: "Cannot modify another admin's status" });
+    }
+
+    targetUser.status = status;
+    await targetUser.save();
+
+    res.json({
+      message: "Status updated successfully",
+      user: {
+        id: targetUser._id,
+        name: targetUser.name,
+        email: targetUser.email,
+        status: targetUser.status
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+router.delete('/delete/:id', authMiddleware, async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (id === req.user.id) {
+      return res.status(403).json({ message: "You cannot delete your own account" });
+    }
+
+    const targetUser = await login.findById(id);
+    if (!targetUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (targetUser.role === "admin") {
+      return res.status(403).json({ message: "Cannot delete another admin" });
+    }
+
+    await login.findByIdAndDelete(id);
+
+    res.json({
+      message: "User deleted successfully",
+      user: {
+        id: targetUser._id,
+        name: targetUser.name,
+        email: targetUser.email
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 
 module.exports= router
